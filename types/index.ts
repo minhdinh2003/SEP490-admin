@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons';
+import { UserRole } from '@/enum/user-role';
 
 export interface NavItem {
   title: string;
@@ -11,6 +12,7 @@ export interface NavItem {
   description?: string;
   isActive?: boolean;
   items?: NavItem[];
+  roles: UserRole[];
 }
 
 export interface NavItemWithChildren extends NavItem {
