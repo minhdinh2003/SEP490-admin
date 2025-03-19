@@ -1,5 +1,5 @@
 import { NavItem } from 'types';
-//x
+
 export const navItems: NavItem[] = [
   {
     title: 'Tổng quan',
