@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import OverViewPage from '@/features/overview/components/overview';
 
 export const metadata = {
@@ -6,3 +7,4 @@ export const metadata = {
 export default function page() {
   return <OverViewPage />;
 }
+
