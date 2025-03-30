@@ -6,7 +6,6 @@ import ProductViewPage from '@/features/products/components/product-view-page';
 export const metadata = {
   title: 'Dashboard : Product View'
 };
-//x
 type PageProps = { params: { productId: string } };
 
 export default function Page({ params }: PageProps) {

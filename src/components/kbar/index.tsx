@@ -1,5 +1,4 @@
 'use client';
-//x
 import { navItems } from '@/constants/data';
 import {
   KBarAnimator,

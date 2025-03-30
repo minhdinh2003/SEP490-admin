@@ -4,7 +4,6 @@ import Header from '@/components/layout/header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-//x
 export const metadata: Metadata = {
   title: 'Màn hình Dashboard',
   description: 'Mô tả màn dashboard'
