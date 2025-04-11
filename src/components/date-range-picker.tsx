@@ -13,15 +13,21 @@ import * as React from 'react';
 import { DateRange } from 'react-day-picker';
 
 export function CalendarDateRangePicker({
-  className
-}: React.HTMLAttributes<HTMLDivElement>) {
+  onDateChange
+}: {
+  onDateChange: (date: DateRange | undefined) => void;
+}) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 30)
   });
 
+  React.useEffect(() => {
+    onDateChange(date); // Gọi callback khi ngày thay đổi
+  }, [date]);
+
   return (
-    <div className={cn('grid gap-2', className)}>
+    <div className={cn('grid gap-2')}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
