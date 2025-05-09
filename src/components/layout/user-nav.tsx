@@ -45,11 +45,12 @@ export function UserNav() {
           <DropdownMenuSeparator />
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => {
-            useAuthStore.getState().signOut();
-            router.push('signin');
-          }
-          }>
+          <DropdownMenuItem
+            onClick={() => {
+              useAuthStore.getState().signOut();
+              router.push('signin');
+            }}
+          >
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

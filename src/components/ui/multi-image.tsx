@@ -4,7 +4,7 @@ import UploadService from '@/services/upload.service';
 import { toast } from 'sonner';
 
 interface MultiImageUploaderProps {
-  value?: string; // Danh sách URL ảnh, phân tách bởi ';'
+  value?: any; // Danh sách URL ảnh, phân tách bởi ';'
   onValueChange: (urls: string[]) => void; // Callback khi danh sách ảnh thay đổi
   maxSize?: number; // Kích thước tối đa cho mỗi file (byte)
 }
@@ -16,8 +16,9 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<string[]>(
-    typeof value === 'string' ? value.split(';').filter(Boolean) : []
+    typeof value === 'string' ? value.split(';').filter(Boolean) : value
   );
+  console.log(value);
 
   const uploadFile = async (file: File) => {
     try {
