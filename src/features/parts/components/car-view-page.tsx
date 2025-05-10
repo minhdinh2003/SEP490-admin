@@ -13,7 +13,7 @@ type TProductViewPageProps = {
 
 export default function ProductViewPage({ productId }: TProductViewPageProps) {
   const [Product, setProduct] = useState<Product | null>(null);
-  const [pageTitle, setPageTitle] = useState<string>('Thêm sản phẩm');
+  const [pageTitle, setPageTitle] = useState<string>('Thêm phụ tùng');
   const [loading, setLoading] = useState<boolean>(true);
   const [modeForm, setModeForm] = useState<ModeForm>(ModeForm.Add);
   useEffect(() => {

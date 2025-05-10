@@ -4,12 +4,11 @@ import { Separator } from '../ui/separator';
 import { Breadcrumbs } from '../breadcrumbs';
 import { UserNav } from './user-nav';
 import ThemeToggle from './ThemeToggle/theme-toggle';
-import { auth } from '@/lib/auth';
+import { useAuthStore } from '@/store/use-auth-store';
 import Image from 'next/image';
 
 export default async function HeaderView() {
-  const session = await auth();
-
+  const { userId } = useAuthStore.getState();
   return (
     <header className='sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-2 bg-white transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
       <div className='flex items-center gap-2 px-4'>
@@ -25,7 +24,8 @@ export default async function HeaderView() {
         {/* <Breadcrumbs /> */}
       </div>
       <div className='flex items-center gap-2 px-4'>
-        {session?.user ? <UserNav /> : null}
+        {userId ? <UserNav /> : null}
+
         <ThemeToggle />
       </div>
     </header>

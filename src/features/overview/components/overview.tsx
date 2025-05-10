@@ -10,8 +10,49 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
+import { DateRange } from 'react-day-picker';
+import React, { useState } from 'react';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { addDays, format } from 'date-fns';
+import { RevenueBarChart } from './revenueByMonth';
 export default function OverViewPage() {
+  const [reportData, setReportData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  var http = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const fetchReport = async (dateRange: DateRange | undefined) => {
+    try {
+      setLoading(true);
+      const fromDate = dateRange?.from || new Date();
+      const toDate = dateRange?.to || addDays(new Date(), 30);
+
+      const response = await http.post('/user/report', {
+        fromDate: format(fromDate, 'yyyy-MM-dd'),
+        toDate: format(toDate, 'yyyy-MM-dd')
+      });
+      setReportData(response.data.data);
+    } catch (error) {
+      console.error('Lỗi khi lấy dữ liệu báo cáo:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDateChange = (dateRange: DateRange | undefined) => {
+    fetchReport(dateRange);
+  };
+  const formatCurrency = (amount: number | undefined): string => {
+    if (!amount) return '0 ₫';
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  };
   return (
     <PageContainer scrollable>
       <div className='space-y-2'>
@@ -20,7 +61,7 @@ export default function OverViewPage() {
             Xin chào, chào mừng trở lại 👋
           </h2>
           <div className='hidden items-center space-x-2 md:flex'>
-            <CalendarDateRangePicker />
+            <CalendarDateRangePicker onDateChange={handleDateChange} />
           </div>
         </div>
         <Tabs defaultValue='overview' className='space-y-4'>
@@ -45,12 +86,16 @@ export default function OverViewPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>10.000.000 VNĐ</div>
+                  <div className='text-2xl font-bold'>
+                    {loading
+                      ? 'Đang tải...'
+                      : `${formatCurrency(reportData?.totalRevenue || 0)} VNĐ`}
+                  </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'>Đăng ký</CardTitle>
+                  <CardTitle className='text-sm font-medium'>Người dùng</CardTitle>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 24 24'
@@ -67,16 +112,21 @@ export default function OverViewPage() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+2350</div>
+                  <div className='text-2xl font-bold'>
+                    {loading
+                      ? 'Đang tải...'
+                      : `+${reportData?.totalRegistrations || 0}`}
+                  </div>
                 </CardContent>
               </Card>
             </div>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-8'>
               <div className='col-span-4'>
-                <AreaGraph />
+                <RevenueBarChart data={reportData?.revenueByMonth || []} />
               </div>
               <div className='col-span-4'>
-                <PieGraph />
+                <PieGraph data={reportData?.orderStatusCounts || []} />
+                {/* <PieGraph data={reportData?.revenueByPaymentMethod || []} /> */}
               </div>
             </div>
           </TabsContent>

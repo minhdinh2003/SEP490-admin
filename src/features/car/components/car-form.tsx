@@ -527,7 +527,7 @@ export default function ProductForm({
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='address'
                 render={({ field }) => (
@@ -543,7 +543,7 @@ export default function ProductForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Images */}
               <FormField
