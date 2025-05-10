@@ -118,7 +118,6 @@ export default function ProductListingPage({}: ListingPage) {
   };
 
   const handleFilterOption = (data: any) => {
-    
     setSelectedBrands(data);
     setPageNumber(1);
     getDataPaging();
