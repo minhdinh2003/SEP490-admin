@@ -1,5 +1,7 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -45,6 +47,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
+import { useAuthStore } from '@/store/use-auth-store';
+import { filterNavItems } from '@/constants/data';
 
 export const company = {
   name: 'Shop Car',
@@ -56,7 +60,9 @@ export default function AppSidebar() {
   const { data: session } = useSession();
   const pathname = usePathname();
   const { state, isMobile } = useSidebar();
-
+  const { role } = useAuthStore.getState();
+  const filteredNavItems = filterNavItems(navItems, role);
+  const router = useRouter();
   return (
     <Sidebar collapsible='icon'>
       <SidebarHeader>
@@ -73,7 +79,7 @@ export default function AppSidebar() {
       <SidebarContent className='overflow-x-hidden'>
         <SidebarGroup>
           <SidebarMenu>
-            {navItems.map((item) => {
+            {filteredNavItems.map((item) => {
               const Icon = item.icon ? Icons[item.icon] : Icons.logo;
               return item?.items && item?.items?.length > 0 ? (
                 <Collapsible
@@ -189,22 +195,13 @@ export default function AppSidebar() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <BadgeCheck />
-                    Account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard />
-                    Billing
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Bell />
-                    Notifications
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    useAuthStore.getState().signOut();
+                    router.push('/signin');
+                  }}
+                >
                   <LogOut />
                   Log out
                 </DropdownMenuItem>

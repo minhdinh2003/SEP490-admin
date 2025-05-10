@@ -6,8 +6,8 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
-  title: 'Danh mục task',
-  description: 'Danh mục task'
+  title: 'Danh sách người dùng',
+  description: 'Người dùng hệ thống'
 };
 
 export default function DashboardLayout({

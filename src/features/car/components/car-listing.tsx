@@ -18,11 +18,11 @@ export default function ProductListingPage({}: ListingPage) {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(50);
   const [search, setSearch] = useState('');
-  var selected: any = [];
+  const [selectedBrands, setSelectedBrands] = useState<any>([]);
   let textSearch = '';
   const getParamPaging = (): IPagingParam => {
     let conditions: ICondition[] = [];
-    if (selected.length > 0) {
+    if (selectedBrands.length > 0) {
       conditions.push({
         key: 'any',
         condition: 'raw',
@@ -35,7 +35,7 @@ export default function ProductListingPage({}: ListingPage) {
               brands: {
                 some: {
                   id: {
-                    in: selected.map((x: any) => x.value)
+                    in: selectedBrands.map((x: any) => x.value)
                   }
                 }
               }
@@ -118,7 +118,8 @@ export default function ProductListingPage({}: ListingPage) {
   };
 
   const handleFilterOption = (data: any) => {
-    selected = data;
+    
+    setSelectedBrands(data);
     setPageNumber(1);
     getDataPaging();
   };

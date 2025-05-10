@@ -1,17 +1,21 @@
 'use client';
-
 import * as React from 'react';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
-
 import { cn } from '@/lib/utils';
 
+// Root component
 const Select = SelectPrimitive.Root;
 
+// Group component
 const SelectGroup = SelectPrimitive.Group;
 
-const SelectValue = SelectPrimitive.Value;
+// Value component
+const SelectValue = ({ children, ...props }: any) => {
+  return <SelectPrimitive.Value {...props}>{children}</SelectPrimitive.Value>;
+};
 
+// Trigger component
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
@@ -32,6 +36,7 @@ const SelectTrigger = React.forwardRef<
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
+// Content component
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
@@ -62,6 +67,7 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
+// Label component
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
@@ -74,6 +80,7 @@ const SelectLabel = React.forwardRef<
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
+// Item component
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
@@ -96,6 +103,7 @@ const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
+// Separator component
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
@@ -108,6 +116,67 @@ const SelectSeparator = React.forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
+// MultiSelect component
+interface MultiSelectProps {
+  options: { value: string; label: string }[];
+  value: string[];
+  onChange: (values: string[]) => void;
+  placeholder?: string;
+}
+
+const MultiSelect: React.FC<MultiSelectProps> = ({
+  options,
+  value,
+  onChange,
+  placeholder
+}) => {
+  const [selectedValues, setSelectedValues] = React.useState<string[]>(value);
+
+  const handleSelect = (val: string) => {
+    if (selectedValues.includes(val)) {
+      setSelectedValues(selectedValues.filter((v) => v !== val));
+    } else {
+      setSelectedValues([...selectedValues, val]);
+    }
+  };
+
+  React.useEffect(() => {
+    onChange(selectedValues);
+  }, [selectedValues]);
+
+  React.useEffect(() => {
+    setSelectedValues(value);
+  }, [value]);
+
+  return (
+    <Select onValueChange={(val) => handleSelect(val)} value=''>
+      <SelectTrigger>
+        <SelectValue>
+          {selectedValues.length > 0
+            ? selectedValues
+                .map((val) => options.find((opt) => opt.value === val)?.label)
+                .join(', ')
+            : placeholder || 'Chọn các mục'}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            <div className='flex items-center gap-2'>
+              <input
+                type='checkbox'
+                checked={selectedValues.includes(option.value)}
+                readOnly
+              />
+              {option.label}
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+};
+
 export {
   Select,
   SelectGroup,
@@ -116,5 +185,6 @@ export {
   SelectContent,
   SelectLabel,
   SelectItem,
-  SelectSeparator
+  SelectSeparator,
+  MultiSelect
 };
