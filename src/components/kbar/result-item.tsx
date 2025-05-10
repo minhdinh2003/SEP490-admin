@@ -1,6 +1,6 @@
 import type { ActionId, ActionImpl } from 'kbar';
 import * as React from 'react';
-//item
+
 const ResultItem = React.forwardRef(
   (
     {
