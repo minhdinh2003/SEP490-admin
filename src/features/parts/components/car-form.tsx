@@ -72,7 +72,7 @@ export default function ProductForm({
     seats: z.number().nullable().optional(),
     doors: z.number().nullable().optional(),
     brand: z.string().nonempty('Vui lòng chọn hãng xe'),
-    address: z.string().nullable().optional(),
+    // address: z.string().nullable().optional(),
     partType: z.enum(
       [
         'ENGINE',
@@ -120,7 +120,7 @@ export default function ProductForm({
     seats: null,
     doors: null,
     brand: '',
-    address: '',
+    // address: '',
     partType: 'OTHERS'
   };
   defaultValues.price = parseInt(defaultValues.price.toString());

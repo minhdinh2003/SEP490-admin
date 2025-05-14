@@ -131,9 +131,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
           </DropdownMenuItem>
 
           {/* Cập nhật kho */}
-          <DropdownMenuItem onClick={() => setOpenInventoryModal(true)}>
+          {/* <DropdownMenuItem onClick={() => setOpenInventoryModal(true)}>
             <Edit className='mr-2 h-4 w-4' /> Cập nhật kho
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
 
           {/* Xóa sản phẩm */}
           <DropdownMenuItem onClick={() => setOpenDeleteModal(true)}>
