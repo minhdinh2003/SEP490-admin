@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import InventoryService from '@/services/inventoryService';
 import { ServiceResponse } from 'types/service.response';
 import { toast } from 'sonner';
+import productService from '@/services/productService';
 interface CellActionProps {
   data: Product;
   handle?: any;
@@ -26,9 +27,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
   const [loading, setLoading] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openInventoryModal, setOpenInventoryModal] = useState(false);
-  const [inventoryQuantity, setInventoryQuantity] = useState<number | null>(
-    null
-  ); // Số lượng kho
   const router = useRouter();
 
   // Xác nhận xóa phụ tùng
@@ -40,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
 
   // Lưu cập nhật số lượng kho
   const onSaveInventory = async () => {
-    if (inventoryQuantity === null) {
+    if (additionalQuantity === null) {
       toast.error('Vui lòng nhập số lượng kho.');
       return;
     }
@@ -48,11 +46,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
     setLoading(true);
     try {
       // Gọi API để cập nhật số lượng kho
-      const response = await InventoryService.updateById<ServiceResponse>(
-        data.inventory.id,
+      const response = await productService.post<ServiceResponse>(
+        '/addStock',
         {
-          productId: data.id,
-          quantity: inventoryQuantity
+          productId: Number(data.id),
+          quantity: Number(additionalQuantity),
+          price: Number(purchasePrice)
         }
       );
 
@@ -70,7 +69,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
       setLoading(false);
     }
   };
-
+  const [additionalQuantity, setAdditionalQuantity] = useState<number | null>(
+    null
+  ); // Số lượng thêm
+  const [purchasePrice, setPurchasePrice] = useState<number | null>(null); // Giá nhập
   return (
     <>
       {/* Modal xác nhận xóa */}
@@ -93,23 +95,92 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
         loading={loading}
         buttonTextCancel='Hủy'
         buttonTextConfirm='Lưu'
-        title='Cập nhật kho'
+        title='Nhập kho'
         content={
-          <div>
-            <p className='mb-1 mt-2'>
-              Số lượng kho hiện tại: {data.inventory?.quantity || 0}
+          <div className='space-y-4'>
+            {/* Hiển thị số lượng kho hiện tại */}
+            <p>
+              Số lượng kho hiện tại:{' '}
+              <strong>{data.inventory?.quantity || 0}</strong>
             </p>
-            {/* <p className='mb-1 mt-2'>Số lượng kho hiện tại: 1</p> */}
-            <Input
-              type='number'
-              placeholder='Nhập số lượng kho mới'
-              value={inventoryQuantity || ''}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setInventoryQuantity(value < 0 ? 0 : value); // Đảm bảo giá trị >= 0
-              }}
-              min={0} // Giới hạn giá trị tối thiểu là 0
-            />
+
+            {/* Nhập số lượng thêm */}
+            <div className='flex items-center space-x-2'>
+              <label
+                htmlFor='additionalQuantity'
+                className='text-sm font-medium'
+              >
+                Số lượng thêm:
+              </label>
+              <div className='flex items-center overflow-hidden rounded-md border'>
+                {/* Nút giảm số lượng */}
+                <button
+                  type='button'
+                  className='bg-gray-100 px-2 py-1 transition-colors hover:bg-gray-200'
+                  onClick={() =>
+                    setAdditionalQuantity((prev) =>
+                      prev ? Math.max(prev - 1, 0) : 0
+                    )
+                  }
+                  disabled={loading}
+                >
+                  -
+                </button>
+
+                {/* Input số lượng thêm */}
+                <Input
+                  id='additionalQuantity'
+                  type='number'
+                  className='w-20 border-none text-center focus:ring-0'
+                  placeholder='Nhập số lượng'
+                  value={additionalQuantity || ''}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    setAdditionalQuantity(value < 0 ? 0 : value); // Đảm bảo giá trị >= 0
+                  }}
+                  min={0} // Giới hạn giá trị tối thiểu là 0
+                />
+
+                {/* Nút tăng số lượng */}
+                <button
+                  type='button'
+                  className='bg-gray-100 px-2 py-1 transition-colors hover:bg-gray-200'
+                  onClick={() =>
+                    setAdditionalQuantity((prev) => (prev || 0) + 1)
+                  }
+                  disabled={loading}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Nhập giá nhập */}
+            <div className='flex items-center space-x-2'>
+              <label htmlFor='purchasePrice' className='text-sm font-medium'>
+                Giá nhập:
+              </label>
+              <Input
+                id='purchasePrice'
+                type='number'
+                className='w-32 rounded-md border px-2 py-1'
+                placeholder='Nhập giá nhập'
+                value={purchasePrice || ''}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  setPurchasePrice(value < 0 ? 0 : value); // Đảm bảo giá trị >= 0
+                }}
+                min={0} // Giới hạn giá trị tối thiểu là 0
+              />
+              <span className='text-sm text-gray-500'>VNĐ</span>
+            </div>
+
+            {/* Thông báo lỗi nếu thiếu thông tin */}
+            {(!additionalQuantity || !purchasePrice) && (
+              <p className='text-sm text-red-500'>
+                Vui lòng nhập đầy đủ số lượng và giá nhập.
+              </p>
+            )}
           </div>
         }
       />
