@@ -1,4 +1,4 @@
-
+'use client';
 import { useAuthStore } from '@/store/use-auth-store';
 import { redirect } from 'next/navigation';
 
