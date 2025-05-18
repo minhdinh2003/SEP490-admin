@@ -7,10 +7,11 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { CalendarIcon } from '@radix-ui/react-icons';
-import { addDays, format } from 'date-fns';
+import { CalendarIcon } from '@radix-ui/react-icons'
+
 import * as React from 'react';
 import { DateRange } from 'react-day-picker';
+import { format, startOfYear } from 'date-fns';
 
 export function CalendarDateRangePicker({
   onDateChange
@@ -18,8 +19,8 @@ export function CalendarDateRangePicker({
   onDateChange: (date: DateRange | undefined) => void;
 }) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 30)
+    from: startOfYear(new Date()),
+    to:  new Date()
   });
 
   React.useEffect(() => {
