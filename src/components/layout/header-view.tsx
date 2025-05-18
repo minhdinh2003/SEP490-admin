@@ -1,7 +1,5 @@
-import React from 'react';
-import { SidebarTrigger } from '../ui/sidebar';
+import React, { useEffect } from 'react';
 import { Separator } from '../ui/separator';
-import { Breadcrumbs } from '../breadcrumbs';
 import { UserNav } from './user-nav';
 import ThemeToggle from './ThemeToggle/theme-toggle';
 import { useAuthStore } from '@/store/use-auth-store';
@@ -9,6 +7,16 @@ import Image from 'next/image';
 
 export default async function HeaderView() {
   const { userId } = useAuthStore.getState();
+    useEffect(() => {
+    
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const interval = setInterval(() => {
+      document.querySelector('body > nextjs-portal')?.remove();
+    }, 10);
+
+    return () => clearInterval(interval); // Cleanup
+  }, []);
   return (
     <header className='sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between gap-2 bg-white transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
       <div className='flex items-center gap-2 px-4'>
