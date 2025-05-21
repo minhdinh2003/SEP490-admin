@@ -1,6 +1,4 @@
 'use client';
-import { FileUploader } from '@/components/file-uploader';
-import { format, parse } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,13 +13,6 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import { Brand } from '@/models/base.model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -49,7 +40,7 @@ export default function BrandForm({
   });
 
   const defaultValues = initialData || {
-    name: 'Honda', // Không được là null
+    name: '', // Không được là null
     description: '', // Chuỗi rỗng
     logoURL: '' // Chuỗi rỗng
   };
@@ -158,7 +149,7 @@ export default function BrandForm({
                 className='border-1 ml-2 border-primary'
                 type='button'
                 variant='outline'
-                onClick={() => router.push('/Brand')}
+                onClick={() => router.push('/product/brand')}
               >
                 Hủy
               </Button>

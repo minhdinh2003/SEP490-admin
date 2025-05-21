@@ -25,7 +25,7 @@ export default function BranchListingPage({}: ListingPage) {
       pageNumber: pageNumber,
       conditions: [],
       searchKey: textSearch,
-      searchFields: ['name', 'description']
+      searchFields: ['name']
     };
     return param;
   };
@@ -50,10 +50,10 @@ export default function BranchListingPage({}: ListingPage) {
     var result = await BrandService.deleteById<ServiceResponse>(id);
     var { data, success, message } = result;
     if (!success) {
-      toast.error('Xóa tài khoản Brand thất bại');
+      toast.error('Xóa hãng xe thất bại');
       return;
     }
-    toast.success('Xóa tài khoản Brand thành công');
+    toast.success('Xóa hãng xe thành công');
     getDataPaging();
     return true;
   };
@@ -80,7 +80,7 @@ export default function BranchListingPage({}: ListingPage) {
     <div>
       <div className='mb-4'>
         <BrandTableAction
-          searchKey='tên, mô tả'
+          searchKey='tên thương hiệu'
           search={search}
           setSearch={handleSetSearch}
         />

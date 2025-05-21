@@ -24,14 +24,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {
+  const onConfirmDelete = async () => {
     setOpen(false);
     setLoading(true);
     handle(ActionType.DELETE, { id: data.id });
   };
-
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   return (
     <>
+      <AlertModal
+        isOpen={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        onConfirm={onConfirmDelete}
+        loading={loading}
+        buttonTextCancel='Hủy'
+        buttonTextConfirm='Tiếp tục'
+        title='Xóa sản phẩm'
+        content={`Bạn có chắc muốn xóa hãng xe ${data.name} không?`}
+      />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-8 w-8 p-0'>
@@ -46,6 +56,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
             onClick={() => router.push(`/product/brand/${data.id}`)}
           >
             <Edit className='mr-2 h-4 w-4' /> Cập nhật
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenDeleteModal(true)}>
+            <Trash className='mr-2 h-4 w-4' /> Xóa
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
