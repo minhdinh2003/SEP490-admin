@@ -1,4 +1,4 @@
-import { AvatarUploader } from '@/components/ui/avatar-upload';
+import { format, parse } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -30,6 +30,7 @@ import MultiImageUploader from '@/components/ui/multi-image';
 import { ProductCategory } from '@/enum/category-type';
 import { useEffect, useState } from 'react';
 import BrandService from '@/services/branchService';
+import { de } from 'date-fns/locale';
 
 export default function ProductForm({
   pageTitle,
@@ -52,6 +53,9 @@ export default function ProductForm({
     price: z
       .number({ invalid_type_error: 'Giá phải là số.' })
       .positive({ message: 'Giá phải lớn hơn 0.' }),
+    originPrice: z
+      .number({ invalid_type_error: 'Giá nhập phải là số.' })
+      .positive({ message: 'Giá nhập phải lớn hơn 0.' }),
     category: z.enum(['CAR', 'PART'], {
       message: 'Loại sản phẩm không hợp lệ.'
     }),
@@ -72,13 +76,21 @@ export default function ProductForm({
     seats: z.number().nullable().optional(),
     doors: z.number().nullable().optional(),
     brand: z.string().nonempty('Vui lòng chọn hãng xe'),
-    address: z.string().nullable().optional()
+    // address: z.string().nullable().optional(),
+    registrationExpiry: z.date().nullable().optional(), // Thời hạn đăng kiểm
+    insuranceExpiry: z.date().nullable().optional(), // Thời hạn bảo hiểm
+    originalPaintPercentage: z.number().nullable().optional(), // % Sơn zin
+    accidentDetails: z.string().nullable().optional(), // Mức độ đâm đụng
+    floodDamageDetails: z.string().nullable().optional(), // Ngập nước
+    engineCondition: z.string().nullable().optional(), // Động cơ
+    transmissionCondition: z.string().nullable().optional() // Hộp số
   });
 
   const defaultValues = initialData || {
     name: '',
     description: '',
     price: 0,
+    originPrice: 0,
     category: 'CAR',
     model: '',
     year: null,
@@ -95,9 +107,29 @@ export default function ProductForm({
     seats: null,
     doors: null,
     brand: '',
-    address: ''
+    // address: '',
+    registrationExpiry: null, // Thời hạn đăng kiểm
+    insuranceExpiry: null, // Thời hạn bảo hiểm
+    originalPaintPercentage: null, // % Sơn zin
+    accidentDetails: '', // Mức độ đâm đụng
+    floodDamageDetails: null, // Ngập nước
+    engineCondition: null, // Động cơ
+    transmissionCondition: null // Hộp số
   };
   defaultValues.price = parseInt(defaultValues.price.toString());
+  defaultValues.originPrice = parseInt(
+    defaultValues.originPrice?.toString() || '0'
+  );
+  if (defaultValues.registrationExpiry) {
+    defaultValues.registrationExpiry = new Date(
+      defaultValues.registrationExpiry.toString()
+    );
+  }
+  if (defaultValues.insuranceExpiry) {
+    defaultValues.insuranceExpiry = new Date(
+      defaultValues.insuranceExpiry.toString()
+    );
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -146,17 +178,20 @@ export default function ProductForm({
     router.push('/product/car');
   };
 
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.category = ProductCategory.CAR;
     var data = JSON.parse(JSON.stringify(values));
+    const oldBrand = data.brand;
     if (data.brand) {
       data.brandInfo = {
         connect: [{ id: parseInt(data.brand) }]
       };
       delete data.brand;
     }
+
     if (modeForm === ModeForm.Update) {
-      if (initialData?.brand && initialData.brand != data.brand) {
+      if (initialData?.brand && initialData.brand != oldBrand) {
         data.brandInfo['disconnect'] = [{ id: parseInt(initialData?.brand) }];
       }
 
@@ -211,11 +246,32 @@ export default function ProductForm({
                 name='price'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Giá</FormLabel>
+                    <FormLabel>Giá bán</FormLabel>
                     <FormControl>
                       <Input
                         type='number'
                         placeholder='Nhập giá sản phẩm'
+                        value={parseInt(field.value?.toString() || '0') || 0}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === '' ? null : Number(value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='originPrice'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Giá nhập</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='number'
+                        placeholder='Nhập giá nhập sản phẩm'
                         value={parseInt(field.value?.toString() || '0') || 0}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -246,7 +302,7 @@ export default function ProductForm({
                         <SelectContent>
                           {brands.map((brand) => (
                             <SelectItem
-                              key={brand.id}
+                              key={brand.id.toString()}
                               value={brand.id.toString() || ''}
                             >
                               {brand.name}
@@ -261,7 +317,7 @@ export default function ProductForm({
               />
 
               {/* Status */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='status'
                 render={({ field }) => (
@@ -282,7 +338,7 @@ export default function ProductForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Model */}
               <FormField
@@ -393,6 +449,23 @@ export default function ProductForm({
                     <FormControl>
                       <Input
                         placeholder='Nhập hộp số'
+                        {...field}
+                        value={field.value || ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='transmissionCondition'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hộp số</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Mô tả tình trạng hộp số'
                         {...field}
                         value={field.value || ''}
                       />
@@ -527,6 +600,149 @@ export default function ProductForm({
                   </FormItem>
                 )}
               />
+              {/* Registration Expiry */}
+              <FormField
+                control={form.control}
+                name='registrationExpiry'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Thời hạn đăng kiểm</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        value={
+                          field.value ? format(field.value, 'yyyy-MM-dd') : ''
+                        }
+                        placeholder='Chọn thời hạn đăng kiểm'
+                        onChange={(e) => {
+                          const dateValue = e.target.value;
+                          field.onChange(
+                            dateValue
+                              ? parse(dateValue, 'yyyy-MM-dd', new Date())
+                              : null
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Insurance Expiry */}
+              <FormField
+                control={form.control}
+                name='insuranceExpiry'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Thời hạn bảo hiểm</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='date'
+                        {...field}
+                        value={
+                          field.value ? format(field.value, 'yyyy-MM-dd') : ''
+                        }
+                        placeholder='Chọn thời hạn bảo hiểm'
+                        onChange={(e) => {
+                          const dateValue = e.target.value;
+                          field.onChange(
+                            dateValue
+                              ? parse(dateValue, 'yyyy-MM-dd', new Date())
+                              : null
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Original Paint Percentage */}
+              <FormField
+                control={form.control}
+                name='originalPaintPercentage'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>% Sơn zin</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='number'
+                        placeholder='Nhập % sơn zin'
+                        {...field}
+                        value={field.value || ''}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === '' ? null : Number(value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Accident Details */}
+              <FormField
+                control={form.control}
+                name='accidentDetails'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mức độ đâm đụng</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Mô tả mức độ đâm đụng'
+                        {...field}
+                        value={field.value || ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Flood Damage Details */}
+              <FormField
+                control={form.control}
+                name='floodDamageDetails'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Ngập nước</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Mô tả tình trạng ngập nước'
+                        {...field}
+                        value={field.value || ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Engine Condition */}
+              <FormField
+                control={form.control}
+                name='engineCondition'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Động cơ</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Mô tả tình trạng động cơ'
+                        {...field}
+                        value={field.value || ''}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Transmission Condition */}
+
               {/* <FormField
                 control={form.control}
                 name='address'

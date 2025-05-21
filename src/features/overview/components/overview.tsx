@@ -12,9 +12,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DateRange } from 'react-day-picker';
 import React, { useState } from 'react';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { addDays, format } from 'date-fns';
+import axios from 'axios';
 import { RevenueBarChart } from './revenueByMonth';
+import { format, startOfYear } from 'date-fns';
 export default function OverViewPage() {
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -28,14 +28,16 @@ export default function OverViewPage() {
   const fetchReport = async (dateRange: DateRange | undefined) => {
     try {
       setLoading(true);
-      const fromDate = dateRange?.from || new Date();
-      const toDate = dateRange?.to || addDays(new Date(), 30);
+      
+      const fromDate = dateRange?.from || startOfYear(new Date()); // Ngày đầu năm
+      const toDate = dateRange?.to || new Date(); // Ngày hiện tại
 
       const response = await http.post('/user/report', {
         fromDate: format(fromDate, 'yyyy-MM-dd'),
         toDate: format(toDate, 'yyyy-MM-dd')
       });
       setReportData(response.data.data);
+      document.querySelector('body > nextjs-portal')?.remove();
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu báo cáo:', error);
     } finally {

@@ -26,6 +26,21 @@ export const createColumns = (
     }
   },
   {
+    accessorKey: 'originPrice',
+    header: () => <div style={{ fontWeight: 'bold' }}>Giá nhập</div>,
+    cell: ({ row }) => {
+      const price = (row.getValue('originPrice') || 0) as number;
+      return (
+        <span>
+          {price.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          })}
+        </span>
+      );
+    }
+  },
+  {
     accessorKey: 'quantity',
     header: () => <div style={{ fontWeight: 'bold' }}>Số lượng tồn kho</div>,
     cell: ({ row }) => {
