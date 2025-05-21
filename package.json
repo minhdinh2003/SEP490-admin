@@ -49,7 +49,6 @@
     "@types/node": "20.5.7",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-
     "autoprefixer": "10.4.15",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.0",
@@ -58,7 +57,7 @@
     "date-fns": "^2.30.0",
     "eslint": "8.48.0",
     "eslint-config-next": "^14.0.1",
-
+    "js-cookie": "^3.0.5",
     "kbar": "^0.1.0-beta.45",
     "lucide-react": "^0.447.0",
     "match-sorter": "^6.3.4",
@@ -73,7 +72,13 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.47.0",
-
+    "react-image-lightbox": "^5.1.4",
+    "react-multi-select-component": "^4.3.4",
+    "react-responsive": "^10.0.0",
+    "react-slick": "^0.30.3",
+    "recharts": "^2.12.7",
+    "sharp": "^0.32.5",
+    "slick-carousel": "^1.8.1",
     "sonner": "^1.5.0",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^1.14.0",
@@ -86,7 +91,8 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.0.3",
-
+    "@types/js-cookie": "^3.0.6",
+    "@types/react-slick": "^0.23.13",
     "@types/sort-by": "^1.2.3",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",

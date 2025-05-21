@@ -32,12 +32,6 @@ export default function SignInViewPage() {
             >
               Quên mật khẩu
             </div>
-            <div
-              className='inline-flex items-center justify-center text-blue-500  hover:cursor-pointer hover:underline'
-              onClick={() => router.push('signup')}
-            >
-              Đăng ký
-            </div>
           </div>
         </div>
       </div>

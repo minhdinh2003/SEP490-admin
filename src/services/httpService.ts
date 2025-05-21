@@ -37,6 +37,7 @@ class HttpService {
         return Promise.resolve(error.response);
       }
     );
+    document.querySelector('body > nextjs-portal')?.remove();
   }
   getUrl(url: string): string {
     return `${this.Controller}${url}`;

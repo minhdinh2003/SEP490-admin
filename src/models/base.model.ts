@@ -47,6 +47,8 @@ export interface TaskTemplate extends BaseEntity {
   id: number; // Khóa chính, tự động tăng
   title?: string; // Tên thương hiệu
   priority?: number; // Mô tả thương hiệu (có thể null)
+  items?: any;
+  price?: number; // Đường dẫn hình ảnh logo (có thể null)  
 }
 
 
@@ -55,6 +57,7 @@ export interface Product extends BaseEntity {
   name: string; // Tên sản phẩm
   description?: string; // Mô tả sản phẩm (có thể null)
   price: number; // Giá sản phẩm
+  originPrice: number; // Giá sản phẩm
   category: ProductCategory; // Loại sản phẩm: 'CAR' hoặc 'PART'
   model?: string | null; // Mẫu xe (nếu là xe)
   year?: number | null; // Năm sản xuất (nếu là xe)
@@ -75,6 +78,13 @@ export interface Product extends BaseEntity {
   address?: string;
   brands?: Brand[];
   brand?: string;
+  registrationExpiry?: Date | null; // Thời hạn đăng kiểm
+  insuranceExpiry?: Date | null; // Thời hạn bảo hiểm
+  originalPaintPercentage?: number | null; // % Sơn zin
+  accidentDetails?: string | null; // Mức độ đâm đụng
+  floodDamageDetails?: string | null; // Ngập nước
+  engineCondition?: string | null; // Động cơ
+  transmissionCondition?: string | null; // Hộp số
 }
 
 export interface Inventory extends BaseEntity {
