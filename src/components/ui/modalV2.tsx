@@ -33,7 +33,7 @@ export const ModalV2: React.FC<ModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogContent className={`${size} w-full max-h-[90vh] overflow-y-auto`}>
+      <DialogContent className={`${size} w-full max-h-[90vh] overflow-y-auto  max-w-6xl`}>
         {/* Header */}
         {title && (
           <DialogHeader>
@@ -57,7 +57,7 @@ export const ModalV2: React.FC<ModalProps> = ({
             max-width: 28rem; /* ~448px */
           }
           .max-w-lg {
-            max-width: 32rem; /* ~512px */
+            max-width: 50rem; /* ~512px */
           }
           .max-w-xl {
             max-width: 36rem; /* ~576px */

@@ -44,64 +44,71 @@ export default function ProductForm({
 }) {
   const router = useRouter();
 
-  const formSchema = z.object({
-    name: z
-      .string()
-      .min(2, { message: 'Tên phụ tùng phải có ít nhất 2 ký tự.' }),
-    description: z.string().optional(),
-    price: z
-      .number({ invalid_type_error: 'Giá phải là số.' })
-      .positive({ message: 'Giá phải lớn hơn 0.' }),
-    originPrice: z
-      .number({ invalid_type_error: 'Giá nhập phải là số.' })
-      .positive({ message: 'Giá nhập phải lớn hơn 0.' }),
-    category: z.enum(['CAR', 'PART'], {
-      message: 'Loại phụ tùng không hợp lệ.'
-    }),
-    model: z.string().nullable().optional(),
-    year: z.number().nullable().optional(),
-    status: z.enum(['AVAILABLE', 'SOLD', 'OUT_OF_STOCK'], {
-      message: 'Trạng thái không hợp lệ.'
-    }),
-    listImage: z.any().optional(),
-    style: z.string().nullable().optional(),
-    engine_capacity: z.string().nullable().optional(),
-    fuel_type: z.string().nullable().optional(),
-    transmission: z.string().nullable().optional(),
-    mileage: z.number().nullable().optional(),
-    exterior_color: z.string().nullable().optional(),
-    interior_color: z.string().nullable().optional(),
-    origin: z.string().nullable().optional(),
-    seats: z.number().nullable().optional(),
-    doors: z.number().nullable().optional(),
-    brand: z.string().nonempty('Vui lòng chọn hãng xe'),
-    // address: z.string().nullable().optional(),
-    partType: z.enum(
-      [
-        'ENGINE',
-        'TRANSMISSION',
-        'BRAKE_SYSTEM',
-        'SUSPENSION',
-        'ELECTRICAL',
-        'COOLING_SYSTEM',
-        'FUEL_SYSTEM',
-        'EXHAUST_SYSTEM',
-        'BODY_PARTS',
-        'INTERIOR',
-        'EXTERIOR',
-        'TIRES_WHEELS',
-        'LIGHTING',
-        'FILTERS',
-        'BELTS',
-        'BATTERIES',
-        'STEERING',
-        'AIR_CONDITIONING',
-        'SAFETY',
-        'OTHERS'
-      ],
-      { message: 'Loại phụ tùng không hợp lệ.' }
-    )
-  });
+  const formSchema = z
+    .object({
+      name: z
+        .string()
+        .min(2, { message: 'Tên phụ tùng phải có ít nhất 2 ký tự.' }),
+      description: z.string().optional(),
+      price: z
+        .number({ invalid_type_error: 'Giá phải là số.' })
+        .positive({ message: 'Giá phải lớn hơn 0.' }),
+      originPrice: z
+        .number({ invalid_type_error: 'Giá nhập phải là số.' })
+        .positive({ message: 'Giá nhập phải lớn hơn 0.' }),
+      category: z.enum(['CAR', 'PART'], {
+        message: 'Loại phụ tùng không hợp lệ.'
+      }),
+      model: z.string().nullable().optional(),
+      year: z.number().nullable().optional(),
+      status: z.enum(['AVAILABLE', 'SOLD', 'OUT_OF_STOCK'], {
+        message: 'Trạng thái không hợp lệ.'
+      }),
+      listImage: z.any().optional(),
+      style: z.string().nullable().optional(),
+      engine_capacity: z.string().nullable().optional(),
+      fuel_type: z.string().nullable().optional(),
+      transmission: z.string().nullable().optional(),
+      mileage: z.number().nullable().optional(),
+      exterior_color: z.string().nullable().optional(),
+      interior_color: z.string().nullable().optional(),
+      origin: z.string().nullable().optional(),
+      seats: z.number().nullable().optional(),
+      doors: z.number().nullable().optional(),
+      brand: z.string().nonempty('Vui lòng chọn hãng xe'),
+      partType: z.enum(
+        [
+          'ENGINE',
+          'TRANSMISSION',
+          'BRAKE_SYSTEM',
+          'SUSPENSION',
+          'ELECTRICAL',
+          'COOLING_SYSTEM',
+          'FUEL_SYSTEM',
+          'EXHAUST_SYSTEM',
+          'BODY_PARTS',
+          'INTERIOR',
+          'EXTERIOR',
+          'TIRES_WHEELS',
+          'LIGHTING',
+          'FILTERS',
+          'BELTS',
+          'BATTERIES',
+          'STEERING',
+          'AIR_CONDITIONING',
+          'SAFETY',
+          'OTHERS'
+        ],
+        { message: 'Loại phụ tùng không hợp lệ.' }
+      )
+    })
+    .refine(
+      (data) => data.price > data.originPrice,
+      {
+        message: 'Giá bán phải lớn hơn giá nhập.',
+        path: ['price']
+      }
+    );
 
   const defaultValues = initialData || {
     name: '',
@@ -305,7 +312,7 @@ export default function ProductForm({
               />
 
               {/* Status */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='status'
                 render={({ field }) => (
@@ -326,7 +333,7 @@ export default function ProductForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Part Type */}
               <FormField

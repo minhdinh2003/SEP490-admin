@@ -59,43 +59,43 @@ export const createColumns = (
       return <span>{row?.original?.inventory?.quantity || 0}</span>;
     }
   },
-  {
-    accessorKey: 'status',
-    header: () => <div style={{ fontWeight: 'bold' }}>Trạng thái</div>,
-    cell: ({ row }) => {
-      const status = row.getValue('status') as string;
-      let statusText = '';
-      let statusColor = '';
+  // {
+  //   accessorKey: 'status',
+  //   header: () => <div style={{ fontWeight: 'bold' }}>Trạng thái</div>,
+  //   cell: ({ row }) => {
+  //     const status = row.getValue('status') as string;
+  //     let statusText = '';
+  //     let statusColor = '';
 
-      switch (status) {
-        case 'AVAILABLE':
-          statusText = 'Có sẵn';
-          statusColor = 'text-green-500';
-          break;
-        case 'SOLD':
-          statusText = 'Đã bán';
-          statusColor = 'text-red-500';
-          break;
-        case 'OUT_OF_STOCK':
-          statusText = 'Hết hàng';
-          statusColor = 'text-gray-500';
-          break;
-        default:
-          statusText = 'Không xác định';
-          statusColor = 'text-black';
-      }
+  //     switch (status) {
+  //       case 'AVAILABLE':
+  //         statusText = 'Có sẵn';
+  //         statusColor = 'text-green-500';
+  //         break;
+  //       case 'SOLD':
+  //         statusText = 'Đã bán';
+  //         statusColor = 'text-red-500';
+  //         break;
+  //       case 'OUT_OF_STOCK':
+  //         statusText = 'Hết hàng';
+  //         statusColor = 'text-gray-500';
+  //         break;
+  //       default:
+  //         statusText = 'Không xác định';
+  //         statusColor = 'text-black';
+  //     }
 
-      return <span className={statusColor}>{statusText}</span>;
-    }
-  },
-  {
-    accessorKey: 'model',
-    header: () => <div style={{ fontWeight: 'bold' }}>Mẫu xe</div>,
-    cell: ({ row }) => {
-      const model = row.getValue('model') as string | null;
-      return model || 'Chưa cập nhật';
-    }
-  },
+  //     return <span className={statusColor}>{statusText}</span>;
+  //   }
+  // },
+  // {
+  //   accessorKey: 'model',
+  //   header: () => <div style={{ fontWeight: 'bold' }}>Mẫu xe</div>,
+  //   cell: ({ row }) => {
+  //     const model = row.getValue('model') as string | null;
+  //     return model || 'Chưa cập nhật';
+  //   }
+  // },
   {
     accessorKey: 'brandName',
     header: () => <div style={{ fontWeight: 'bold' }}>Hãng xe</div>,

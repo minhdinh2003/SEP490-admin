@@ -56,10 +56,10 @@ export default function BrandForm({
         toast.error(result.message);
         return;
       }
-      toast.success('Cập nhật người dùng thành công');
+      toast.success('Cập nhật hãng xe thành công');
       router.push('/product/brand');
     } else {
-      toast.success('Không tìm thấy thông tin người dùng');
+      toast.success('Không tìm thấy thông tin hãng xe');
     }
   };
 
@@ -69,7 +69,7 @@ export default function BrandForm({
       toast.error(result.message);
       return;
     }
-    toast.success('Thêm người dùng thành công');
+    toast.success('Thêm hãng xe thành công');
     router.push('/product/brand');
   };
 

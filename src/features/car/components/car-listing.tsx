@@ -60,7 +60,8 @@ export default function ProductListingPage({}: ListingPage) {
       includeReferences: {
         inventory: true,
         brands: true
-      }
+      },
+      sortOrder: "updatedAt desc"
     };
     return param;
   };

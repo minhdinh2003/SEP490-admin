@@ -55,9 +55,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data, handle }) => {
           <DropdownMenuItem onClick={() => router.push(`/user/${data.id}`)}>
             <Edit className='mr-2 h-4 w-4' /> Cập nhật
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          {/* <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className='mr-2 h-4 w-4' /> Xóa
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

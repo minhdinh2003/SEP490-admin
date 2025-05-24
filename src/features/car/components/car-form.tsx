@@ -94,7 +94,7 @@ export default function ProductForm({
   );
 
   const defaultValues = initialData
-  ? {
+    ? {
       ...initialData,
       registrationExpiry: initialData.registrationExpiry
         ? new Date(initialData.registrationExpiry)
@@ -105,7 +105,7 @@ export default function ProductForm({
       price: parseInt(initialData.price?.toString() || '0'),
       originPrice: parseInt(initialData.originPrice?.toString() || '0'),
     }
-  : {
+    : {
       name: '',
       description: '',
       price: 0,
@@ -136,14 +136,14 @@ export default function ProductForm({
       ownerCount: 0
     };
 
-// XÓA 2 DÒNG NÀY (không cần nữa):
-// defaultValues.price = parseInt(defaultValues.price.toString());
-// defaultValues.originPrice = parseInt(
-//   defaultValues.originPrice?.toString() || '0'
+  // XÓA 2 DÒNG NÀY (không cần nữa):
+  // defaultValues.price = parseInt(defaultValues.price.toString());
+  // defaultValues.originPrice = parseInt(
+  //   defaultValues.originPrice?.toString() || '0'
 
 
 
-const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues
   });
@@ -326,7 +326,7 @@ const form = useForm<z.infer<typeof formSchema>>({
               />
 
               {/* Status */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name='status'
                 render={({ field }) => (
@@ -347,7 +347,7 @@ const form = useForm<z.infer<typeof formSchema>>({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               {/* Model */}
               <FormField

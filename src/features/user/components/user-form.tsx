@@ -56,8 +56,38 @@ export default function UserForm({
       message: 'Invalid role.'
     }),
     gender: z.enum(['MALE', 'FEMALE', 'OTHER'], { message: 'Invalid gender.' }),
-    dateOfBirth: z.date().nullable().optional(),
-    phoneNumber: z.string().nullable().optional(),
+    dateOfBirth: z
+      .date()
+      .nullable()
+      .optional()
+      .refine(
+        (date) => {
+          if (!date) return true; // Không bắt buộc
+          const now = new Date();
+          const age = now.getFullYear() - date.getFullYear();
+          if (
+            age < 18 ||
+            age > 100 ||
+            (age === 18 &&
+              (now.getMonth() < date.getMonth() ||
+                (now.getMonth() === date.getMonth() && now.getDate() < date.getDate())))
+          ) {
+            return false;
+          }
+          return true;
+        },
+        { message: 'Tuổi phải từ 18 đến 100.' }
+      ),
+    phoneNumber: z
+      .string()
+      .nullable()
+      .optional()
+      .refine(
+        (val) =>
+          !val ||
+          /^0\d{9,10}$/.test(val.replace(/\s+/g, '')),
+        { message: 'Số điện thoại không hợp lệ.' }
+      ),
     addressLine1: z.string().nullable().optional(),
     addressLine2: z.string().nullable().optional(),
     province: z.string().nullable().optional(),
@@ -254,11 +284,12 @@ export default function UserForm({
                         }
                         onChange={(e) => {
                           const dateValue = e.target.value;
-                          field.onChange(
-                            dateValue
-                              ? parse(dateValue, 'yyyy-MM-dd', new Date())
-                              : null
-                          );
+                          // Kiểm tra đúng định dạng yyyy-MM-dd trước khi parse
+                          if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+                            field.onChange(parse(dateValue, 'yyyy-MM-dd', new Date()));
+                          } else {
+                            field.onChange(null);
+                          }
                         }}
                       />
                     </FormControl>

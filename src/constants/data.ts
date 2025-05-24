@@ -8,7 +8,7 @@ export const navItems: NavItem[] = [
     icon: 'dashboard',
     isActive: false,
     shortcut: ['d', 'd'],
-    roles: [UserRole.OWNER],
+    roles: [UserRole.ADMIN],
     items: []
   },
   {
@@ -16,27 +16,27 @@ export const navItems: NavItem[] = [
     url: '#',
     icon: 'product',
     isActive: false,
-    roles: [UserRole.OWNER],
+    roles: [UserRole.ADMIN],
     items: [
       {
         title: 'Hãng xe',
         url: '/product/brand',
         icon: 'userPen',
-        roles: [UserRole.OWNER],
+        roles: [UserRole.ADMIN],
         shortcut: ['p', 'c']
       },
       {
         title: 'Xe',
         shortcut: ['p', 'c'],
         url: '/product/car',
-        roles: [UserRole.OWNER],
+        roles: [UserRole.ADMIN],
         icon: 'login'
       },
       {
         title: 'Phụ tùng xe',
         shortcut: ['p', 'd'],
         url: '/product/part',
-        roles: [UserRole.OWNER],
+        roles: [UserRole.ADMIN],
         icon: 'login'
       }
     ]
@@ -53,7 +53,7 @@ export const navItems: NavItem[] = [
     url: '/task-template',
     icon: 'kanban',
     isActive: false,
-    roles: [UserRole.OWNER]
+    roles: [UserRole.ADMIN]
   },
   {
     title: 'Tài khoản',
