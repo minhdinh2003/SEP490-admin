@@ -52,6 +52,9 @@ export default function ProductForm({
     price: z
       .number({ invalid_type_error: 'Giá phải là số.' })
       .positive({ message: 'Giá phải lớn hơn 0.' }),
+    originPrice: z
+      .number({ invalid_type_error: 'Giá nhập phải là số.' })
+      .positive({ message: 'Giá nhập phải lớn hơn 0.' }),
     category: z.enum(['CAR', 'PART'], {
       message: 'Loại phụ tùng không hợp lệ.'
     }),
@@ -104,6 +107,7 @@ export default function ProductForm({
     name: '',
     description: '',
     price: 0,
+    originPrice: 0,
     category: 'CAR',
     model: '',
     year: null,
@@ -124,6 +128,9 @@ export default function ProductForm({
     partType: 'OTHERS'
   };
   defaultValues.price = parseInt(defaultValues.price.toString());
+  defaultValues.originPrice = parseInt(
+    defaultValues.originPrice?.toString() || '0'
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -264,6 +271,27 @@ export default function ProductForm({
                       <Input
                         type='number'
                         placeholder='Nhập giá phụ tùng'
+                        value={parseInt(field.value?.toString() || '0') || 0}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          field.onChange(value === '' ? null : Number(value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='originPrice'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Giá nhập</FormLabel>
+                    <FormControl>
+                      <Input
+                        type='number'
+                        placeholder='Nhập giá nhập sản phẩm'
                         value={parseInt(field.value?.toString() || '0') || 0}
                         onChange={(e) => {
                           const value = e.target.value;

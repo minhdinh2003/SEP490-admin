@@ -7,5 +7,5 @@ interface PathRoleConfig {
 }
 
 export const pathRoleConfig: PathRoleConfig[] = [
-  { path: '/dashboard', roles: [UserRole.ADMIN], fullPath: false } // Admin và user có thể truy cập /dashboard và các route con
+  { path: '/dashboard', roles: [UserRole.ADMIN, UserRole.OWNER], fullPath: false } // Admin và Owner có thể truy cập /dashboard và các route con
 ];

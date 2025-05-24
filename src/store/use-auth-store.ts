@@ -3,7 +3,6 @@
 import { AUTH_STORAGE_KEY } from '@/constants/local-storage-key';
 import { UserRole } from '@/enum/user-role';
 import {
-
   getCurrentUserService,
   SignInParams,
   signInService,
@@ -87,7 +86,6 @@ export const useAuthStore = create(
       },
       signOut: async () => {
         // const response = await signOutService();
-        debugger;
         set({
           authenticated: false,
           user: {},

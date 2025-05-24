@@ -45,7 +45,18 @@ export default function UserAuthForm() {
     });
     if (result.success) {
       toast.success('Đăng nhập thành công');
+<<<<<<< HEAD
       router.push('/dashboard/overview');
+=======
+      console.log('result', result.data.role);
+      if (result.data.role === 'ADMIN') {
+        router.push('/user');
+      } else if (result.data.role === 'OWNER') {
+        router.push('/dashboard/overview');
+      } else {
+        router.push('/'); // fallback nếu không phải ADMIN hoặc OWNER
+      }
+>>>>>>> b695a40 (Refactor and clean up code across multiple files)
     } else {
       toast.error('Đăng nhập thất bại');
     }

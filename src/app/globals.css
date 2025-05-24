@@ -4,6 +4,10 @@
 
 @layer base {
   :root {
+    --sonner-success: #4caf50; /* Màu xanh lá cây mặc định */
+    --sonner-error: #f44336; /* Màu đỏ */
+    --sonner-warning: #ff9800; /* Màu cam */
+    --sonner-info: #2196f3; /* Màu xanh dương */
     --background: 20 66% 99%;
     --foreground: 20 51% 4%;
     --muted: 20 25% 86%;
@@ -124,4 +128,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.custom-mul-select .dropdown-container {
+  border: 1px solid var(--border) !important;
 }

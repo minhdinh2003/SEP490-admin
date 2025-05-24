@@ -27,7 +27,7 @@ export default function TaskTemplateViewPage({ id }: TTaskTemplateViewPageProps)
             notFound();
           }
           setTaskTemplate(result.data as TaskTemplate);
-          debugger
+          
           setPageTitle('Cập nhật danh mục task');
           setModeForm(ModeForm.Update);
         }

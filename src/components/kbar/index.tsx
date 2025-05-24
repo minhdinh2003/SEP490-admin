@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
-=======
 'use client';
->>>>>>> ae46164c3f9f5f35ecd5890e6fff3e5483bb0a6b
 import { navItems } from '@/constants/data';
 import {
   KBarAnimator,

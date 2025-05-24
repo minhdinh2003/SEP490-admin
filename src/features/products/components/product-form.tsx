@@ -20,7 +20,8 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Product } from '@/constants/mock-api';
+import { Product } from '@/models/base.model';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -50,9 +51,7 @@ const formSchema = z.object({
   }),
   category: z.string(),
   price: z.number(),
-  description: z.string().min(10, {
-    message: 'Description must be at least 10 characters.'
-  })
+  description: z.string().optional()
 });
 
 export default function ProductForm({

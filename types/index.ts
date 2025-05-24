@@ -13,7 +13,6 @@ export interface NavItem {
   isActive?: boolean;
   items?: NavItem[];
   roles: UserRole[];
-
 }
 
 export interface NavItemWithChildren extends NavItem {

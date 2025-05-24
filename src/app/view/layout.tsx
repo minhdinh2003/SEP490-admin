@@ -3,6 +3,7 @@ import HeaderView from '@/components/layout/header-view';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import { useEffect } from 'react';
 
 export const metadata: Metadata = {
   title: 'Màn hình View',
@@ -14,6 +15,7 @@ export default function ViewLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
   return (
